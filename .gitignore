@@ -1,0 +1,33 @@
+# 1. PYTHON BASICS (File sampah sistem Python)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 2. DATASET (Ukuran besar & privasi)
+data/
+*.csv
+*.xlsx
+
+# 3. MODEL ARTIFACTS (File hasil training)
+# Kita ignore karena bisa di-generate ulang pakai kode
+models/
+*.pkl
+*.joblib
+*.model
+
+# 4. JUPYTER NOTEBOOKS (File cache notebook)
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# 5. OUTPUTS (Hasil prediksi)
+# Kita ignore file submission csv
+outputs/*.csv
+# TAPI, kita tetap mau upload gambar hasil EDA untuk README
+!outputs/*.png
+!outputs/*.jpg
+
+# 6. SYSTEM FILES (Sampah Mac/Windows)
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
