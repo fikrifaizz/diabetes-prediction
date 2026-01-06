@@ -1,32 +1,46 @@
-# Diabetes Prediction - Kaggle Playground S5E12
+# End-to-End Diabetes Risk Prediction System
 
-![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+![Python](https://img.shields.io/badge/Python-3.12%2B-blue?style=for-the-badge&logo=python)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking-blueviolet?style=for-the-badge&logo=mlflow)
+![Kaggle API](https://img.shields.io/badge/Kaggle-API-20BEFF?style=for-the-badge&logo=kaggle)
+![Scikit-Learn](https://img.shields.io/badge/scikit--learn-Ensemble-orange?style=for-the-badge&logo=scikit-learn)
 
-## Overview
-Repository ini berisi solusi *End-to-End Machine Learning* untuk kompetisi **Kaggle Playground Series S5E12: Diabetes Prediction**. Tujuan utama project ini adalah memprediksi probabilitas seorang pasien didiagnosis diabetes berdasarkan data kesehatan dan demografi.
+## Project Overview
+Repository ini berisi solusi *Machine Learning Pipeline* lengkap untuk **Diabetes Prediction Challenge (Kaggle Playground S5E12)**. Sistem ini memprediksi probabilitas diagnosis diabetes berdasarkan data metabolik dan demografi pasien.
 
-Solusi ini dibangun dengan fokus pada **Reproducibility** (mudah dijalankan ulang) dan **High Accuracy** menggunakan teknik Ensemble Learning.
+Fokus utama project ini adalah membangun **Fully Reproducible & Automated Pipeline** yang mengintegrasikan pengambilan data otomatis, pelacakan eksperimen (MLOps), dan pemodelan ensemble tingkat lanjut.
 
 **Target Metric:** ROC AUC
 
-## Key Strategy
-Untuk mencapai akurasi tinggi, pendekatan berikut diterapkan:
+---
 
-1.  **Medical Feature Engineering:**
-    * Menambahkan fitur medis seperti *Pulse Pressure*, *Mean Arterial Pressure (MAP)*, dan *Cholesterol Ratio*.
-    * Interaksi fitur gaya hidup (Diet, Aktivitas Fisik, Alkohol).
-2.  **Robust Preprocessing:**
-    * Menggunakan `OrdinalEncoder` untuk data kategorikal.
-    * `RobustScaler` untuk menangani outlier pada data numerik.
-3.  **Model Ensemble (Stacking/Blending):**
-    * Menggabungkan 3 model kuat: **XGBoost**, **HistGradientBoosting**, dan **Random Forest**.
-    * Pembobotan (Weighted Average) berdasarkan performa Cross-Validation.
-4.  **Hyperparameter Tuning:**
-    * Menggunakan **Optuna** untuk mencari parameter optimal secara otomatis.
+## Key Technical Features
 
-## Project Structure
-Struktur direktori disusun menggunakan prinsip *Cookiecutter Data Science* yang disederhanakan:
+### 1. Automated Data Ingestion
+Tidak perlu download manual. Project ini dilengkapi script otomatis yang menggunakan **Kaggle API** untuk mengunduh, mengekstrak, dan menyiapkan dataset dalam satu perintah terminal.
+
+### 2. MLOps Integration (MLflow)
+Setiap proses training dicatat secara otomatis menggunakan **MLflow**:
+* **Hyperparameter Tracking:** Mencatat setting model (e.g., `xgb_learning_rate`).
+* **Performance Metrics:** Mencatat skor validasi (AUC, Accuracy, F1, Log Loss) secara real-time.
+* **Artifact Versioning:** Menyimpan model `.pkl` dan preprocessor untuk reproduksibilitas.
+
+### 3. Medical Feature Engineering
+Meningkatkan akurasi model dengan fitur berbasis domain medis:
+* **Pulse Pressure & MAP:** Indikator kesehatan kardiovaskular.
+* **Cholesterol Ratio:** Rasio LDL/HDL untuk deteksi risiko dini.
+* **Lifestyle Risk Score:** Gabungan aktivitas fisik, diet, dan BMI.
+
+### 4. Robust Ensemble Strategy
+Menggunakan pendekatan *Soft Voting* dengan pembobotan dinamis dari 3 algoritma state-of-the-art:
+* **XGBoost:** Bobot Tinggi (High Accuracy).
+* **HistGradientBoosting:** Bobot Menengah (Speed & Stability).
+* **Random Forest:** Bobot Rendah (Variance Reduction).
+
+---
+
+## 📂 Project Structure
+Struktur direktori disusun modular menggunakan prinsip *Cookiecutter Data Science*:
 
 ```text
 diabetes-prediction/
@@ -63,7 +77,17 @@ cd diabetes-prediction
 pip install -r requirements.txt
 ```
 
-3. Setup Data: Letakkan file train.csv dan test.csv dari Kaggle ke dalam folder data/.
+3. Setup Kaggle API:
+    - Buat API Token di akun Kaggle Anda (Settings -> Create New Token).
+    - Simpan file `kaggle.json` di:
+        - Linux/MacOS: `~/.kaggle/kaggle.json`
+        - Windows: `C:\Users\<YourUsername>\kaggle.json`
+
+4. Download Data Otomatis: Jalankan perintah ini untuk menarik data dari server Kaggle:
+
+```Bash
+python -m src.extract
+```
 
 ## Usage (Cara Menjalankan)
 Project ini dirancang modular. Anda tidak perlu membuka Notebook untuk melatih model ulang.
@@ -78,8 +102,16 @@ Project ini dirancang modular. Anda tidak perlu membuka Notebook untuk melatih m
 
     Output: Model .pkl akan disimpan di folder models/.
 
+2. Monitoring Dashboard (MLflow)
 
-2. Inference (Membuat Prediksi)
+    Melihat grafik performa dan perbandingan parameter:
+
+    ```Bash
+    mlflow ui
+    ```
+    Buka browser dan akses `http://127.0.0.1:5000`
+
+3. Inference (Membuat Prediksi)
 
     Jalankan perintah ini untuk memprediksi data test dan membuat file submission:
 
