@@ -39,7 +39,23 @@ Menggunakan pendekatan *Soft Voting* dengan pembobotan dinamis dari 3 algoritma 
 
 ---
 
-## 📂 Project Structure
+## Business Insights & Recommendations
+Berdasarkan analisis *Feature Importance* dan hasil prediksi model, berikut rekomendasi strategis untuk implementasi klinis:
+
+1.  **Prioritas Skrining Awal (Triage Tool):**
+    * **Insight:** Fitur `Age`, `BMI`, dan `Pulse Pressure` (Tekanan Nadi) adalah prediktor terkuat.
+    * **Rekomendasi:** Gunakan model ini sebagai alat *pre-screening* murah di klinik pratama untuk memprioritaskan pasien yang membutuhkan tes HbA1c (laboratorium).
+
+2.  **Intervensi Gaya Hidup:**
+    * **Insight:** Pasien dengan riwayat keluarga diabetes (*Family History*) dan skor diet rendah memiliki risiko signifikan lebih tinggi.
+    * **Rekomendasi:** Fokuskan program edukasi preventif pada kelompok usia muda (20-40 tahun) yang memiliki riwayat genetik.
+
+3.  **Indikator Medis Kardiovaskular:**
+    * **Insight:** Variabel turunan seperti *Mean Arterial Pressure (MAP)* meningkatkan sensitivitas deteksi risiko.
+
+---
+
+## Project Structure
 Struktur direktori disusun modular menggunakan prinsip *Cookiecutter Data Science*:
 
 ```text
@@ -122,11 +138,13 @@ Project ini dirancang modular. Anda tidak perlu membuka Notebook untuk melatih m
     Output: File submission_final.csv akan muncul di folder outputs/.
 
 ## Results & Performance
-| Model | CV Score (AUC) | Weight in Ensemble |
-| --- | --- | --- |
-| XGBoost | 0.726 | 0.50 |
-| HistGradientBoosting | 0.724 | 0.35 |
-| Random Forest | 0.701 | 0.15 |
+Evaluasi model menunjukkan konsistensi yang baik antara validasi internal dan pengujian eksternal:
+
+| Metric | Score | Keterangan |
+| :--- | :--- | :--- |
+| **CV Score (Mean)** | **0.7265** | Rata-rata 5-Fold Stratified Cross-Validation |
+| **Public LB** | **0.6954** | Skor Kaggle pada 20% data test |
+| **Private LB** | **0.6920** | Skor Kaggle pada 80% data test (Final Score) |
 
 
 ## Visualizations
