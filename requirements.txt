@@ -8,3 +8,4 @@ optuna
 fastapi
 uvicorn
 pydantic
+kaggle
