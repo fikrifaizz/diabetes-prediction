@@ -72,7 +72,6 @@ def index():
 
 @app.post("/predict")
 def predict_diabetes(data: PatientData):
-    global model, preprocessor
     
     if not model or not preprocessor:
         raise HTTPException(status_code=500, detail="Model artifacts not loaded.")
