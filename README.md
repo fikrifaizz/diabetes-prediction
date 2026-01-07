@@ -1,144 +1,58 @@
 # End-to-End Diabetes Risk Prediction System
 
 ![Python](https://img.shields.io/badge/Python-3.12%2B-blue?style=for-the-badge&logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker)
+![GitHub Actions](https://img.shields.io/badge/CI%2FCD-2088FF?style=for-the-badge&logo=github-actions)
 ![MLflow](https://img.shields.io/badge/MLflow-Tracking-blueviolet?style=for-the-badge&logo=mlflow)
-![Kaggle API](https://img.shields.io/badge/Kaggle-API-20BEFF?style=for-the-badge&logo=kaggle)
-![Scikit-Learn](https://img.shields.io/badge/scikit--learn-Ensemble-orange?style=for-the-badge&logo=scikit-learn)
+![Kaggle](https://img.shields.io/badge/Kaggle-API-20BEFF?style=for-the-badge&logo=kaggle)
 
 ## Project Overview
 Repository ini berisi solusi *Machine Learning Pipeline* lengkap untuk **Diabetes Prediction Challenge (Kaggle Playground S5E12)**. Sistem ini memprediksi probabilitas diagnosis diabetes berdasarkan data metabolik dan demografi pasien.
 
-Fokus utama project ini adalah membangun **Fully Reproducible & Automated Pipeline** yang mengintegrasikan pengambilan data otomatis, pelacakan eksperimen (MLOps), dan pemodelan ensemble tingkat lanjut.
+Project ini dirancang untuk mendemonstrasikan kemampuan **End-to-End MLOps**, mulai dari analisis medis, pemodelan ensemble, hingga deployment API menggunakan Docker dan otomatisasi CI/CD.
 
 **Target Metric:** ROC AUC
 
 ---
 
-## Key Technical Features
-
-### 1. Automated Data Ingestion
-Tidak perlu download manual. Project ini dilengkapi script otomatis yang menggunakan **Kaggle API** untuk mengunduh, mengekstrak, dan menyiapkan dataset dalam satu perintah terminal.
-
-### 2. MLOps Integration (MLflow)
-Setiap proses training dicatat secara otomatis menggunakan **MLflow**:
-* **Hyperparameter Tracking:** Mencatat setting model (e.g., `xgb_learning_rate`).
-* **Performance Metrics:** Mencatat skor validasi (AUC, Accuracy, F1, Log Loss) secara real-time.
-* **Artifact Versioning:** Menyimpan model `.pkl` dan preprocessor untuk reproduksibilitas.
-
-### 3. Medical Feature Engineering
-Meningkatkan akurasi model dengan fitur berbasis domain medis:
-* **Pulse Pressure & MAP:** Indikator kesehatan kardiovaskular.
-* **Cholesterol Ratio:** Rasio LDL/HDL untuk deteksi risiko dini.
-* **Lifestyle Risk Score:** Gabungan aktivitas fisik, diet, dan BMI.
-
-### 4. Robust Ensemble Strategy
-Menggunakan pendekatan *Soft Voting* dengan pembobotan dinamis dari 3 algoritma state-of-the-art:
-* **XGBoost:** Bobot Tinggi (High Accuracy).
-* **HistGradientBoosting:** Bobot Menengah (Speed & Stability).
-* **Random Forest:** Bobot Rendah (Variance Reduction).
-
----
-
 ## Business Insights & Recommendations
-Berdasarkan analisis *Feature Importance* dan hasil prediksi model, berikut rekomendasi strategis untuk implementasi klinis:
+Berdasarkan analisis *Feature Importance* dan hasil model, berikut rekomendasi strategis untuk implementasi klinis:
 
 1.  **Prioritas Skrining Awal (Triage Tool):**
     * **Insight:** Fitur `Age`, `BMI`, dan `Pulse Pressure` (Tekanan Nadi) adalah prediktor terkuat.
-    * **Rekomendasi:** Gunakan model ini sebagai alat *pre-screening* murah di klinik pratama untuk memprioritaskan pasien yang membutuhkan tes HbA1c (laboratorium).
+    * **Rekomendasi:** Gunakan model ini sebagai alat *pre-screening* di klinik pratama untuk memprioritaskan pasien yang membutuhkan tes HbA1c (laboratorium).
 
 2.  **Intervensi Gaya Hidup:**
-    * **Insight:** Pasien dengan riwayat keluarga diabetes (*Family History*) dan skor diet rendah memiliki risiko signifikan lebih tinggi.
-    * **Rekomendasi:** Fokuskan program edukasi preventif pada kelompok usia muda (20-40 tahun) yang memiliki riwayat genetik.
+    * **Insight:** Pasien dengan riwayat keluarga diabetes dan skor diet rendah memiliki risiko signifikan lebih tinggi.
+    * **Rekomendasi:** Program preventif harus difokuskan pada kelompok usia muda (20-40 tahun) yang memiliki riwayat genetik untuk mencegah onset dini.
 
-3.  **Indikator Medis Kardiovaskular:**
-    * **Insight:** Variabel turunan seperti *Mean Arterial Pressure (MAP)* meningkatkan sensitivitas deteksi risiko.
+3.  **Indikator Medis Baru:**
+    * **Insight:** Variabel turunan *Mean Arterial Pressure (MAP)* terbukti meningkatkan sensitivitas deteksi risiko kardiovaskular dibandingkan tekanan darah biasa.
 
 ---
 
-## Project Structure
-Struktur direktori disusun modular menggunakan prinsip *Cookiecutter Data Science*:
+## Key Engineering Features
 
-```text
-diabetes-prediction/
-│
-├── data/                    # Dataset (Train/Test csv) - Diabaikan oleh git
-├── models/                  # Model .pkl yang sudah dilatih (disimpan otomatis)
-├── notebooks/               # Jupyter Notebooks untuk eksperimen
-│   ├── eda.ipynb            # Analisis Data Eksploratif (EDA)
-│   └── modeling.ipynb       # Eksperimen Model & Optuna Tuning
-│
-├── outputs/                 # Hasil prediksi (submission.csv)
-├── src/                     # Source Code untuk Produksi
-│   ├── extract.py           # Script Extract Data dari Kaggle
-│   ├── config.py            # Konfigurasi & Hyperparameters
-│   ├── preprocessing.py     # Class Feature Engineering
-│   ├── train.py             # Script Training Pipeline
-│   └── inference.py         # Script Prediksi Pipeline
-│
-├── requirements.txt         # Daftar library
-└── README.md                # Dokumentasi Project
-```
+### 1. Production-Ready Deployment (API & Docker)
+Model tidak hanya berhenti di Notebook. Project ini menyertakan:
+* **FastAPI:** REST API responsif untuk melakukan inferensi real-time.
+* **Dockerized:** Seluruh aplikasi dibungkus dalam container, menjamin konsistensi environment (menghilangkan masalah *"it works on my machine"*).
 
-## Installation
-1. Clone repository ini:
+### 2. CI/CD Pipeline (GitHub Actions)
+Otomatisasi penuh menggunakan GitHub Actions:
+* **Code Quality:** Otomatis menjalankan `flake8` linting setiap push.
+* **Automated Retraining:** Pipeline otomatis menarik data baru dari Kaggle, melatih ulang model, dan menyimpan model `.pkl` sebagai **GitHub Artifacts**.
 
-```Bash
-git clone [https://github.com/fikrifaizz/diabetes-prediction.git](https://github.com/fikrifaizz/diabetes-prediction.git)
-cd diabetes-prediction
-```
+### 3. Automated Data Ingestion
+Script otomatis (`src/extract.py`) yang menggunakan **Kaggle API** untuk mengunduh dan mengekstrak dataset secara aman.
 
-2. Install dependencies: Disarankan menggunakan Virtual Environment.
+### 4. MLOps Integration (MLflow)
+Pelacakan eksperimen terpusat mencatat Hyperparameter, Metrics (AUC, Log Loss), dan Artifact Model untuk setiap run.
 
-```Bash
-pip install -r requirements.txt
-```
-
-3. Setup Kaggle API:
-    - Buat API Token di akun Kaggle Anda (Settings -> Create New Token).
-    - Simpan file `kaggle.json` di:
-        - Linux/MacOS: `~/.kaggle/kaggle.json`
-        - Windows: `C:\Users\<YourUsername>\kaggle.json`
-
-4. Download Data Otomatis: Jalankan perintah ini untuk menarik data dari server Kaggle:
-
-```Bash
-python -m src.extract
-```
-
-## Usage (Cara Menjalankan)
-Project ini dirancang modular. Anda tidak perlu membuka Notebook untuk melatih model ulang.
-
-1. Training Model (Retrain) 
-
-    Jalankan perintah ini untuk melatih model menggunakan parameter terbaik (yang tersimpan di src/config.py) pada 100% data training:
-
-    ```Bash
-    python -m src.train
-    ```
-
-    Output: Model .pkl akan disimpan di folder models/.
-
-2. Monitoring Dashboard (MLflow)
-
-    Melihat grafik performa dan perbandingan parameter:
-
-    ```Bash
-    mlflow ui
-    ```
-    Buka browser dan akses `http://127.0.0.1:5000`
-
-3. Inference (Membuat Prediksi)
-
-    Jalankan perintah ini untuk memprediksi data test dan membuat file submission:
-
-    ```Bash
-    python -m src.inference
-    ```
-
-    Output: File submission_final.csv akan muncul di folder outputs/.
-
+---
 ## Results & Performance
-Evaluasi model menunjukkan konsistensi yang baik antara validasi internal dan pengujian eksternal:
+Evaluasi model menunjukkan stabilitas yang baik (*Robustness*) antara validasi internal dan data tes eksternal:
 
 | Metric | Score | Keterangan |
 | :--- | :--- | :--- |
@@ -146,6 +60,86 @@ Evaluasi model menunjukkan konsistensi yang baik antara validasi internal dan pe
 | **Public LB** | **0.6954** | Skor Kaggle pada 20% data test |
 | **Private LB** | **0.6920** | Skor Kaggle pada 80% data test (Final Score) |
 
+**Ensemble Strategy:** Soft Voting (XGBoost 50% + HistGradient 35% + Random Forest 15%).
+
+---
+
+## Project Structure
+Struktur direktori modular (*Cookiecutter Data Science adapted*):
+
+```text
+diabetes-prediction/
+│
+├── .github/workflows/       # CI/CD Pipeline Config (YAML)
+├── data/                    # Dataset (Train/Test)
+├── models/                  # Artifacts Model & Preprocessor
+├── mlruns/                  # MLflow Tracking Database
+├── notebooks/               # EDA & Experiment Notebooks
+├── outputs/                 # Visualisasi & Submission CSV
+├── src/                     # Source Code Utama
+│   ├── app.py               # FastAPI Server (Prediction API)
+│   ├── extract.py           # Script Download Data
+│   ├── preprocessing.py     # Feature Engineering Class
+│   ├── train.py             # Training Pipeline
+│   └── inference.py         # Batch Prediction Script
+│
+├── Dockerfile               # Konfigurasi Docker Image
+├── requirements.txt         # Dependencies Python
+└── README.md                # Dokumentasi Project
+```
+
+## Installation & Usage
+### A. Cara Cepat (Menggunakan Docker)
+Pastikan Docker Desktop sudah terinstall.
+1. Build Image:
+    ```Bash
+    docker build -t diabetes-prediction .
+    ```
+2. Run Container:
+    ```Bash
+    docker run -d --name diabetes-prediction -p 8000:8000 diabetes-prediction
+    ```
+3. Akses API:
+    - API dapat diakses di `http://localhost:8000`
+    - Dokumentasi API dapat diakses di `http://localhost:8000/docs`
+
+### B. Cara Manual (Local Environment)
+1. Clone dan Install:
+
+```Bash
+git clone [https://github.com/fikrifaizz/diabetes-prediction.git](https://github.com/fikrifaizz/diabetes-prediction.git)
+pip install -r requirements.txt
+```
+
+2. Setup Kaggle API:
+    - Buat API Token di akun Kaggle Anda (Settings -> Create New Token).
+    - Simpan file `kaggle.json` di:
+        - Linux/MacOS: `~/.kaggle/kaggle.json`
+        - Windows: `C:\Users\<YourUsername>\kaggle.json`
+
+3. Download Data Otomatis: Jalankan perintah ini untuk menarik data dari server Kaggle:
+
+```Bash
+python -m src.extract
+```
+
+4. Training Model:
+    ```Bash
+    python -m src.train
+    ```
+
+5. Monitoring Dashboard (MLflow):
+    ```Bash
+    mlflow ui
+    ```
+    Buka browser dan akses `http://127.0.0.1:5000`
+
+6. Jalankan API:
+    ```Bash
+    python -m src.app
+    ```
+    API dapat diakses di `http://localhost:8000`
+    Dokumentasi API dapat diakses di `http://localhost:8000/docs`
 
 ## Visualizations
 Berikut adalah hasil analisis korelasi fitur terhadap target Diabetes:
